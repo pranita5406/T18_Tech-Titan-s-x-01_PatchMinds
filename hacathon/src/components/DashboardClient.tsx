@@ -155,7 +155,7 @@ function DashboardContent() {
   const showTimeoutMessage = timedOut && !hasData;
 
   return (
-    <div className={"flex h-screen overflow-hidden bg-slate-950 text-slate-200 animate-in fade-in duration-700 zoom-in-95" + (demoAlertVisible ? " ring-2 ring-purple-500" : "")}>
+    <div className={"flex h-screen max-h-screen overflow-hidden bg-slate-950 text-slate-200 animate-in fade-in duration-700 zoom-in-95" + (demoAlertVisible ? " ring-2 ring-purple-500" : "")}>
       {/* Demo Mode Alert Overlay */}
       {demoAlertVisible && (
         <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-purple-600 border border-purple-400 text-white px-6 py-3 rounded-lg shadow-2xl font-bold flex items-center gap-2 z-[100] animate-in slide-in-from-top-4">
@@ -165,39 +165,42 @@ function DashboardContent() {
       )}
 
       <SidebarNav activeTab={activeTab} setActiveTab={setActiveTab} />
-      
-      <main className="flex-1 flex flex-col h-full overflow-hidden relative">
-        {activeTab === 'home' && (
-          <>
-            <RiskProfileHeader
-              vitalsData={effectiveVitalsData}
-              handoffData={effectiveHandoffData}
-              timeout={showTimeoutMessage}
-            />
-            <div className="flex-1 overflow-y-auto p-4 md:p-6 custom-scrollbar">
-              <div className="max-w-[1600px] mx-auto h-full flex flex-col xl:flex-row gap-6">
-                {/* Main Content Area */}
-                <div className="flex-1 flex flex-col gap-6 min-w-0">
-                  <div className="flex-1 min-h-[400px]">
-                    <SBARPanel handoffData={effectiveHandoffData} />
-                  </div>
-                  <div className="shrink-0">
-                    <InteractiveTimeline />
-                  </div>
-                </div>
 
-                {/* Right Sidebar - Intelligence Feed */}
-                <div className="w-full xl:w-96 shrink-0 h-[600px] xl:h-auto">
-                  <IntelligenceFeed
+      <main className="flex-1 min-w-0 flex flex-col h-full overflow-hidden justify-start items-stretch">
+        {activeTab === 'home' && (
+          <div className="flex h-full min-h-0 overflow-hidden">
+            <div className="flex-1 min-w-0 h-full overflow-hidden">
+              <div className="h-full overflow-y-auto p-4 md:p-6 custom-scrollbar min-h-0">
+                <div className="mx-auto flex h-full min-h-[0] max-w-[1600px] flex-col gap-6">
+                  <RiskProfileHeader
                     vitalsData={effectiveVitalsData}
                     handoffData={effectiveHandoffData}
-                    isLoading={isLoading}
-                    timedOut={showTimeoutMessage}
+                    timeout={showTimeoutMessage}
                   />
+
+                  <div className="grid w-full gap-6 lg:grid-cols-[minmax(0,1fr)_350px] items-start">
+                    <div className="flex min-w-0 flex-col gap-6">
+                      <div className="min-h-[400px]">
+                        <SBARPanel handoffData={effectiveHandoffData} />
+                      </div>
+                      <div className="shrink-0">
+                        <InteractiveTimeline />
+                      </div>
+                    </div>
+
+                    <div className="w-full lg:sticky lg:top-6 lg:border-l lg:border-slate-800 lg:pl-6">
+                      <IntelligenceFeed
+                        vitalsData={effectiveVitalsData}
+                        handoffData={effectiveHandoffData}
+                        isLoading={isLoading}
+                        timedOut={showTimeoutMessage}
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-          </>
+          </div>
         )}
 
         {activeTab === 'sbar' && <SBARFullView handoffData={handoffData} />}
@@ -227,28 +230,25 @@ function DashboardContent() {
 
 function DashboardSkeleton() {
   return (
-    <div className="flex h-screen overflow-hidden bg-slate-950 relative">
+    <div className="flex h-screen max-h-screen overflow-hidden bg-slate-950 relative">
       <div className="absolute inset-0 opacity-30 pointer-events-none flex">
-        <div className="w-16 lg:w-64 bg-slate-900 border-r border-slate-800" />
-        <div className="flex-1 flex flex-col h-full overflow-hidden">
-          <div className="h-32 bg-slate-900 border-b border-slate-800 p-6 flex gap-6">
-            <div className="w-16 h-16 rounded-2xl bg-slate-800" />
-            <div className="flex flex-col gap-3 flex-1">
-               <div className="h-6 bg-slate-800 rounded w-48" />
-               <div className="h-4 bg-slate-800 rounded w-64" />
+        <div className="w-[260px] min-w-[260px] bg-slate-900 border-r border-slate-800" />
+        <div className="flex-1 min-w-0 flex flex-col h-full overflow-hidden">
+          <div className="h-full overflow-hidden">
+            <div className="h-full overflow-y-auto p-6 custom-scrollbar min-h-0">
+              <div className="mx-auto flex h-full min-h-[0] max-w-[1600px] flex-col gap-6">
+                <div className="h-28 bg-slate-900 rounded-3xl border border-slate-800" />
+                <div className="grid w-full gap-6 lg:grid-cols-[minmax(0,1fr)_350px] items-start">
+                  <div className="flex min-w-0 flex-col gap-6">
+                    <div className="h-[420px] bg-slate-900 rounded-3xl border border-slate-800" />
+                    <div className="h-80 bg-slate-900 rounded-3xl border border-slate-800" />
+                  </div>
+                  <div className="w-full lg:sticky lg:top-6 lg:border-l lg:border-slate-800 lg:pl-6">
+                    <div className="h-[600px] bg-slate-900 rounded-3xl border border-slate-800" />
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="flex gap-4">
-               <div className="w-40 h-24 bg-slate-800 rounded-xl" />
-               <div className="w-40 h-24 bg-slate-800 rounded-xl" />
-               <div className="w-40 h-24 bg-slate-800 rounded-xl" />
-            </div>
-          </div>
-          <div className="flex-1 p-6 flex gap-6">
-            <div className="flex-1 flex flex-col gap-6">
-              <div className="flex-1 bg-slate-900 rounded-xl border border-slate-800" />
-              <div className="h-40 bg-slate-900 rounded-xl border border-slate-800" />
-            </div>
-            <div className="w-96 bg-slate-900 rounded-xl border border-slate-800" />
           </div>
         </div>
       </div>

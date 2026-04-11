@@ -62,9 +62,10 @@ const CLINICAL_KEYWORDS: Record<string, KeywordHighlight> = {
 interface HighlightedTextProps {
   text: string;
   onHover?: (keyword: KeywordHighlight | null) => void;
+  onClick?: (keyword: KeywordHighlight) => void;
 }
 
-export function HighlightedText({ text, onHover }: HighlightedTextProps) {
+export function HighlightedText({ text, onHover, onClick }: HighlightedTextProps) {
   const [hoveredKeyword, setHoveredKeyword] = useState<KeywordHighlight | null>(null);
 
   const words = text.split(/(\s+)/).map((word, idx) => {
@@ -86,6 +87,7 @@ export function HighlightedText({ text, onHover }: HighlightedTextProps) {
               setHoveredKeyword(kw);
               onHover?.(kw);
             }}
+            onClick={() => onClick?.(keyword)}
           />
           {afterWord}
         </span>
@@ -95,15 +97,17 @@ export function HighlightedText({ text, onHover }: HighlightedTextProps) {
     return <span key={idx}>{word}</span>;
   });
 
-  return <div className="relative">{words}</div>;
+  return <span className="relative">{words}</span>;
 }
 
 function KeywordBadge({
   keyword,
   onHover,
+  onClick,
 }: {
   keyword: KeywordHighlight;
   onHover: (kw: KeywordHighlight | null) => void;
+  onClick?: () => void;
 }) {
   const [showTooltip, setShowTooltip] = useState(false);
 
@@ -123,8 +127,9 @@ function KeywordBadge({
         setShowTooltip(false);
         onHover(null);
       }}
+      onClick={() => onClick?.()}
       className={cn(
-        "relative inline-block px-1.5 py-0.5 rounded border transition-colors cursor-help font-semibold",
+        "relative inline-block px-1.5 py-0.5 rounded border transition-colors cursor-pointer font-semibold",
         colorScheme[keyword.relevance]
       )}
     >

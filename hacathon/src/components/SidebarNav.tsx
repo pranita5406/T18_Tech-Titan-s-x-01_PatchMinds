@@ -33,7 +33,7 @@ export function SidebarNav({ activeTab, setActiveTab }: SidebarNavProps) {
 
   return (
     <>
-      <div className="w-16 lg:w-64 bg-slate-900 border-r border-slate-800 text-slate-400 flex flex-col h-full z-10 transition-all duration-300">
+      <div className="w-[260px] min-w-[260px] max-w-[260px] bg-slate-900 border-r border-slate-800 text-slate-400 flex flex-col h-full z-10 transition-all duration-300">
         <div 
           className="h-16 flex items-center justify-center lg:justify-start lg:px-6 border-b border-slate-800 cursor-pointer hover:bg-slate-800/50 transition"
           onClick={() => setActiveTab('home')}

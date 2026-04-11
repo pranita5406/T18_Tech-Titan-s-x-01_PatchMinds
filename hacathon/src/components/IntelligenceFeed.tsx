@@ -26,6 +26,7 @@ export function IntelligenceFeed({ vitalsData, handoffData, isLoading, timedOut 
   ];
   const gaps = rawGaps.length ? rawGaps : [fallbackTrend];
   const isAnalyzing = isLoading && !timedOut;
+  const divergenceGap = gaps.find((gap) => gap.type === 'trend');
 
   // Trigger animation when new gaps appear
   useEffect(() => {
@@ -70,6 +71,28 @@ export function IntelligenceFeed({ vitalsData, handoffData, isLoading, timedOut 
       </div>
 
       <div className="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar">
+        {divergenceGap && !isAnalyzing && !timedOut && (
+          <div className="rounded-3xl border border-slate-700 bg-slate-950/90 p-4 mb-3">
+            <div className="flex items-center justify-between gap-3 mb-3">
+              <div>
+                <p className="text-xs uppercase tracking-[0.24em] text-slate-500">Divergence Graph</p>
+                <h3 className="text-sm font-semibold text-white">Trend Divergence</h3>
+              </div>
+              <span className="text-[10px] uppercase tracking-[0.2em] text-amber-300 bg-amber-950/40 px-2 py-1 rounded-full">Why?</span>
+            </div>
+            <div className="grid gap-2">
+              <div className="h-3 rounded-full bg-slate-800 overflow-hidden">
+                <div className="h-full rounded-full bg-amber-400" style={{ width: '65%' }} />
+              </div>
+              <div className="h-3 rounded-full bg-slate-800 overflow-hidden">
+                <div className="h-full rounded-full bg-crimson-400" style={{ width: '45%' }} />
+              </div>
+              <p className="text-[11px] text-slate-400 leading-relaxed">
+                {divergenceGap.clinical_insight || 'Hemodynamic divergence between HR and BP indicates potential risk of shock or sepsis escalation.'}
+              </p>
+            </div>
+          </div>
+        )}
         {timedOut ? (
           <div className="rounded-3xl border border-crimson-700 bg-crimson-950/90 p-6 text-center">
             <AlertTriangle className="w-7 h-7 mx-auto text-crimson-300 mb-3" />
@@ -197,7 +220,10 @@ function GapCard({
             )}>
               View Details
             </button>
-            <ChevronRight className="w-4 h-4 text-slate-500" />
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] uppercase tracking-[0.18em] text-slate-400 bg-slate-900/70 px-2 py-1 rounded-full border border-slate-700">Why?</span>
+              <ChevronRight className="w-4 h-4 text-slate-500" />
+            </div>
           </div>
         </div>
       </div>
